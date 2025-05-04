@@ -1,27 +1,29 @@
 "use client";
-import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ArrowBigRightIcon } from "lucide-react";
 import { CardPercent } from "./components/CardPercent";
 import { Header } from "./components/Header";
 import { Button } from "@/components/ui/button";
-import { ArrowBigRightIcon } from "lucide-react";
 import { SectionList } from "./components/SectionList";
-import Link from "next/link";
+import { getFoodDiary } from "./firebase/foodDiary";
+import { HistoryGroup } from "./dtos/HistoryGroup";
 
 export default function Home() {
-  const sections = [
-    {
-      title: "Frutas",
-      data: ["Banana", "Maçã", "Laranja"],
-    },
-    {
-      title: "Verduras",
-      data: ["Alface", "Couve", "Espinafre"],
-    },
-    {
-      title: "Grãos",
-      data: ["Arroz", "Feijão", "Lentilha"],
-    },
-  ];
+  const [getResult, setResult] = useState<HistoryGroup[]>([]);
+  async function get() {
+   try {
+    const result = await getFoodDiary()
+    setResult(result.map((item: HistoryGroup) => item))
+   } catch (error) {
+    console.log(error)
+   }
+  }
+
+  useEffect(() => {
+    get()
+  },[])
+
   return (
     <div className="max-w-7xl mx-auto">
       <Header>Aplicativo Realcenutri</Header>
@@ -41,7 +43,7 @@ export default function Home() {
       </div>
 
       <div>
-        <SectionList sections={sections}/>
+        <SectionList sections={getResult}/>
       </div>
     </div>
   );

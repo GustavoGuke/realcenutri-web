@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from "next/navigation"
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -17,51 +18,66 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowBigRightIcon, ArrowBigLeftIcon } from "lucide-react"
+import { createMeal } from "@/app/firebase/foodDiary";
+import { useState } from "react";
+import { Spinner } from "@/app/components/Spinner";
+
 
 
 const formSchema = z.object({
-    meal: z.string().min(1, {message: "Favor preencha o campo.",}),
-    describe: z.string().min(1, { message: "Favor preencha o campo.",}),
-    optionRadio: z.enum(["Sim", "Nao"], {required_error: "Favor preencha o campo.",}),
+    meal: z.string().min(1, { message: "Favor preencha o campo.", }),
+    describe: z.string().min(1, { message: "Favor preencha o campo.", }),
+    optionRadio: z.enum(["Sim", "Nao"], { required_error: "Favor preencha o campo.", }),
 })
 
 type FormSchema = z.infer<typeof formSchema>
-export default function NewMeal () {
+export default function NewMeal() {
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             meal: "",
             describe: "",
-            
         },
     })
 
-    function onSubmit(data: FormSchema) {
-        console.log(data)
+    async function onSubmit(data: FormSchema) {
+        setIsLoading(true)
+        try {
+            const response = await createMeal("", data.meal, data.describe, data.optionRadio === "Sim", "")
+            if (!response) return
+            form.reset()
+            router.push("/")
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
     return (
         <>
             <div className="max-w-xl p-4 mx-auto">
 
-            <div className="mt-2 flex justify-between items-center mx-auto">
-                <Link href="/">
-                    <Button variant="outline" className="border-none" >
-                        <ArrowBigLeftIcon />
-                        <p className="">Voltar</p>
-                    </Button>
-                </Link>
-            <h1 className="text-2xl font-bold text-center my-3 text-teal-600">
-                Adicionar refeição
-            </h1>
+                <div className="mt-2 flex justify-between items-center mx-auto">
+                    <Link href="/">
+                        <Button variant="outline" className="border-none" >
+                            <ArrowBigLeftIcon />
+                            <p className="">Voltar</p>
+                        </Button>
+                    </Link>
+                    <h1 className="text-2xl font-bold text-center my-3 text-teal-600">
+                        Adicionar refeição
+                    </h1>
+                </div>
             </div>
-            </div>
-            
-            
+
+
 
             <div className="max-w-xl mx-auto p-4">
-                
-                
-                
+
+
+
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                         <FormField
@@ -81,7 +97,7 @@ export default function NewMeal () {
                             )}
                         />
                         <FormField
-                           
+
                             control={form.control}
                             name="describe"
                             render={({ field }) => (
@@ -130,8 +146,15 @@ export default function NewMeal () {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />  
-                        <Button type="submit" className="mt-5 bg-teal-700 hover:bg-teal-500 w-full">Salvar</Button>
+                        />
+                        {isLoading ? (
+                            <Spinner />
+                        ) : (
+                            <Button type="submit" className="mx-auto mt-5  w-full  text-center bg-teal-600 hover:bg-teal-500">
+                                <p className="flex-1">Adicionar refeição</p>
+                                <ArrowBigRightIcon />
+                            </Button>
+                        )}
                     </form>
                 </Form>
             </div>
