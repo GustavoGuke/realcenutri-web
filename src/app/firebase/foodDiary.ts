@@ -11,6 +11,7 @@ import { db } from "./conexao"
 
 export async function getFoodDiary() {
     const Id = ""
+
     try {
         const mealsRef = collection(db, "meals");
         const q = query(mealsRef, where('userId', '==', Id), orderBy('createdAt', 'desc'));

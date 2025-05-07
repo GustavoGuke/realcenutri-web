@@ -29,10 +29,11 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 export default function UpdateMeal() {
     const [isLoading, setIsLoading] = useState(false)
-    const searchParams = useSearchParams()
-    const item = searchParams.get("item")
-    const parsedItem = item ? JSON.parse(decodeURIComponent(item)) : null
-    let { hour, meals, withinDiet, idMeal, description, reasonNotDiet } = parsedItem
+    
+    // const searchParams = useSearchParams()
+    // const item = searchParams.get("item")
+    // const parsedItem = item ? JSON.parse(decodeURIComponent(item)) : null
+    //let { hour, meals, withinDiet, idMeal, description, reasonNotDiet } = parsedItem
 
     const form = useForm<FormSchema>({
             resolver: zodResolver(formSchema),

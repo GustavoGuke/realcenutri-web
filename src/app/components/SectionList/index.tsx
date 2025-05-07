@@ -1,31 +1,44 @@
+"use client"
 import { HistoryDTO } from "@/app/dtos/HistoryDTO";
 import { HistoryGroup } from "@/app/dtos/HistoryGroup";
+import { ifError } from "assert";
 import { ArrowBigRightIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 type Props = {
-    sections: HistoryGroup[]
+    sections: HistoryGroup[] | undefined
 }
 export const SectionList = ({ sections }: Props) => {
+    const router = useRouter()
 
-    console.log("sections", sections)
+    const handleNavigate = (item: HistoryDTO) => {
+        router.push("../FoodDiary/UpdateMeal")
+        sessionStorage.setItem("selectedMeal", JSON.stringify(item))
+    }
+
+    //console.log("sections", sections)
     return (
         <div className="max-w-md mx-auto p-4">
 
-            {sections.length === 0 ? (
+            {sections?.length === 0 ? (
                 <p>Nenhuma refeição cadastrada</p>
             ) : (
-                sections.map((section, index) => (
+                sections?.map((section, index) => (
                     <div key={index} className="mb-4 mt-6">
                         <h2 className="text-lg font-bold mb-2">{section.title}</h2>
                         <ul className="list-disc ">
                             {section.data.map((item: HistoryDTO, idx) => (
-                                <li key={idx} className="text-gray-700 list-none py-2 border mt-1 p-1 bg-white hover:bg-gray-100 font-semibold rounded-md  border-gray-400">
-                                    <Link href={`../FoodDiary/UpdateMeal?item=${encodeURIComponent(JSON.stringify(item))}`} className="flex justify-between ">
+                                <li key={idx}
+                                    onClick={() => handleNavigate(item)}
+                                    className="text-gray-700 flex justify-between list-none py-2 border mt-1 p-1 bg-white hover:bg-gray-100 font-semibold rounded-md  border-gray-400"
+                                >
+                                    {item.meals} - {item.withinDiet ? "Dentro da dieta" : "Fora da dieta"}
+                                    <ArrowBigRightIcon />
+                                    {/* <Link href={`../FoodDiary/UpdateMeal?item=${encodeURIComponent(JSON.stringify(item))}`} className="flex justify-between ">
                                         {item.meals} - {item.withinDiet ? "Dentro da dieta" : "Fora da dieta"}
-                                        <ArrowBigRightIcon />
-                                    </Link>
+                                    </Link> */}
                                 </li>
                             ))}
                         </ul>

@@ -9,7 +9,7 @@ type Props = {
 
 export const CardPercent = ({title, subtitle, onFoodMeals, ...props}: Props) => {
     return (
-        <Button onClick={onFoodMeals} {...props} className={clsx("w-full justify-between p-10 cursor-pointer",
+        <Button onClick={onFoodMeals} {...props} className={clsx("w-full justify-between p-10 ",
             {
                 "bg-red-300 hover:bg-red-200": title <= 79,
                 "bg-green-800 hover:bg-green-700": title >= 80
@@ -19,7 +19,6 @@ export const CardPercent = ({title, subtitle, onFoodMeals, ...props}: Props) => 
                 <h1>{title}%</h1>
                 <h2>{title <= 79 ? "Continue com a dieta " : "Muito bom"}</h2>
             </div>
-            <ArrowLongRightIcon/>
         </Button>
     )
 }
