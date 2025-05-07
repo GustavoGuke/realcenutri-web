@@ -17,7 +17,7 @@ export const CardPercent = ({title, subtitle, onFoodMeals, ...props}: Props) => 
         )} >
             <div className="flex-1">
                 <h1>{title}%</h1>
-                <h2>{title <= 79 ? "fora do Plano" : "dentro do Plano"}</h2>
+                <h2>{title <= 79 ? "Continue com a dieta " : "Muito bom"}</h2>
             </div>
             <ArrowLongRightIcon/>
         </Button>

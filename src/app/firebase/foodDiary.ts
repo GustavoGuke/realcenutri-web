@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import { db } from "./conexao"
 
 export async function getFoodDiary() {
-    const Id = 
+    const Id = ""
     try {
         const mealsRef = collection(db, "meals");
         const q = query(mealsRef, where('userId', '==', Id), orderBy('createdAt', 'desc'));
