@@ -1,5 +1,4 @@
 "use client"
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeftIcon, ArrowBigRightIcon } from "lucide-react";
@@ -18,41 +17,74 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/app/components/Spinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMeal } from "@/app/context/MealContext";
+import { deleteMealStorage, updateMealStorage } from "@/app/firebase/foodDiary";
+import { useRouter } from "next/navigation";
+import { on } from "events";
 
 
 const formSchema = z.object({
     meal: z.string().min(1, { message: "Favor preencha o campo.", }),
-    describe: z.string().min(1, { message: "Favor preencha o campo.", }),
-    optionRadio: z.enum(["Sim", "Nao"], { required_error: "Favor preencha o campo.", }),
+    description: z.string().min(1, { message: "Favor preencha o campo.", }),
+    //optionRadio: z.enum(["Sim", "Nao"], { required_error: "Favor preencha o campo.", }),
 })
 type FormSchema = z.infer<typeof formSchema>
 export default function UpdateMeal() {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
-    
-    // const searchParams = useSearchParams()
-    // const item = searchParams.get("item")
-    // const parsedItem = item ? JSON.parse(decodeURIComponent(item)) : null
-    //let { hour, meals, withinDiet, idMeal, description, reasonNotDiet } = parsedItem
+    const { selectedMeal } = useMeal()
+
+
+    const defaultValues: FormSchema = {
+        meal: selectedMeal?.meals || "",
+        description: selectedMeal?.description || "",
+        //optionRadio: selectedMeal?.withinDiet ? "Sim" : "Nao",
+    }
+
 
     const form = useForm<FormSchema>({
-            resolver: zodResolver(formSchema),
-            defaultValues: {
-                meal: "",
-                describe: "",
-            },
-        })
-    
+        resolver: zodResolver(formSchema),
+        defaultValues, values: {
+            ...defaultValues
+        },
+    })
+
     async function onSubmit(data: FormSchema) {
-            setIsLoading(true)
-            try {
-            
-            } catch (error) {
-                console.log(error)
-            } finally {
-                setIsLoading(false)
+        setIsLoading(true)
+        try {
+            const response = await updateMealStorage("", selectedMeal?.idMeal || "", data)
+            if(response){
+                alert("Refeição alterada com sucesso")
+                router.push("/")
+            } else {
+                alert("Ocorreu um erro ao tentar alterar refeição, tente novamente mais tarde.")
+                router.push("/")
             }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
         }
+    }
+
+    async function onDelete() {
+        setIsLoading(true)
+        try {
+            const response = await deleteMealStorage("", selectedMeal?.idMeal || "")
+            if(response){
+                alert("Refeição excluida com sucesso")
+                router.push("/")
+            } else {
+                alert("Ocorreu um erro ao tentar excluir refeição, tente novamente mais tarde.")
+                router.push("/")
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
     return (
         <>
             <div className="max-w-xl p-4 mx-auto">
@@ -95,7 +127,7 @@ export default function UpdateMeal() {
                         <FormField
 
                             control={form.control}
-                            name="describe"
+                            name="description"
                             render={({ field }) => (
                                 <FormItem className="mt-15">
                                     <FormLabel>Descrição</FormLabel>
@@ -109,7 +141,7 @@ export default function UpdateMeal() {
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                        {/* <FormField
                             control={form.control}
                             name="optionRadio"
                             render={({ field }) => (
@@ -142,12 +174,21 @@ export default function UpdateMeal() {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                        /> */}
                         {isLoading ? (
                             <Spinner />
                         ) : (
                             <Button type="submit" className="mx-auto mt-5  w-full  text-center bg-teal-600 hover:bg-teal-500">
-                                <p className="flex-1">Adicionar refeição</p>
+                                <p className="flex-1">Salvar</p>
+                                <ArrowBigRightIcon />
+                            </Button>
+                        )}
+                        {isLoading ? (
+                            <Spinner />
+                        ) : (
+                                <Button type="button" className="mx-auto mt-5  w-full  text-center bg-red-400 hover:bg-red-500"
+                                    onClick={() => onDelete()}>
+                                <p className="flex-1">Excluir</p>
                                 <ArrowBigRightIcon />
                             </Button>
                         )}

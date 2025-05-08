@@ -1,4 +1,5 @@
 "use client"
+import { useMeal } from "@/app/context/MealContext";
 import { HistoryDTO } from "@/app/dtos/HistoryDTO";
 import { HistoryGroup } from "@/app/dtos/HistoryGroup";
 import { ifError } from "assert";
@@ -12,10 +13,11 @@ type Props = {
 }
 export const SectionList = ({ sections }: Props) => {
     const router = useRouter()
+    const {setSelectedMeal} = useMeal()
 
     const handleNavigate = (item: HistoryDTO) => {
+        setSelectedMeal(item)
         router.push("../FoodDiary/UpdateMeal")
-        sessionStorage.setItem("selectedMeal", JSON.stringify(item))
     }
 
     //console.log("sections", sections)
