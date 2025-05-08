@@ -23,7 +23,6 @@ import { useState } from "react";
 import { Spinner } from "@/app/components/Spinner";
 
 
-
 const formSchema = z.object({
     meal: z.string().min(1, { message: "Favor preencha o campo.", }),
     describe: z.string().min(1, { message: "Favor preencha o campo.", }),
@@ -31,6 +30,7 @@ const formSchema = z.object({
 })
 
 type FormSchema = z.infer<typeof formSchema>
+
 export default function NewMeal() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
@@ -72,12 +72,7 @@ export default function NewMeal() {
                 </div>
             </div>
 
-
-
             <div className="max-w-xl mx-auto p-4">
-
-
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                         <FormField
@@ -97,7 +92,6 @@ export default function NewMeal() {
                             )}
                         />
                         <FormField
-
                             control={form.control}
                             name="describe"
                             render={({ field }) => (

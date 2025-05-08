@@ -15,13 +15,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+//import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/app/components/Spinner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMeal } from "@/app/context/MealContext";
 import { deleteMealStorage, updateMealStorage } from "@/app/firebase/foodDiary";
 import { useRouter } from "next/navigation";
-import { on } from "events";
 
 
 const formSchema = z.object({
@@ -34,14 +33,11 @@ export default function UpdateMeal() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const { selectedMeal } = useMeal()
-
-
     const defaultValues: FormSchema = {
         meal: selectedMeal?.meals || "",
         description: selectedMeal?.description || "",
         //optionRadio: selectedMeal?.withinDiet ? "Sim" : "Nao",
     }
-
 
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
@@ -88,7 +84,6 @@ export default function UpdateMeal() {
     return (
         <>
             <div className="max-w-xl p-4 mx-auto">
-
                 <div className="mt-2 flex justify-between items-center mx-auto">
                     <Link href="/">
                         <Button variant="outline" className="border-none" >
@@ -103,9 +98,6 @@ export default function UpdateMeal() {
             </div>
 
             <div className="max-w-xl mx-auto p-4">
-
-
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                         <FormField
@@ -125,7 +117,6 @@ export default function UpdateMeal() {
                             )}
                         />
                         <FormField
-
                             control={form.control}
                             name="description"
                             render={({ field }) => (

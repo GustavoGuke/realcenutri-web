@@ -10,26 +10,10 @@ import { getMeal } from "./actions/getMeals";
 
 export default async function Home() {
   const getResult = await getMeal()
-  
   const goodSequence = getResult?.map(item => item.data).flat().filter((withinDiet: HistoryDTO) => withinDiet.withinDiet === true).length
   const badSequence = getResult?.map(item => item.data).flat().filter((withinDiet: HistoryDTO) => withinDiet.withinDiet === false).length
-  
   let totalSequence = goodSequence! + badSequence!
   let goodSequencePercentage = (goodSequence! / totalSequence) * 100
-
-
-  // async function get() {
-  //  try {
-  //   const result = await getFoodDiary()
-  //   setResult(result.map((item: HistoryGroup) => item))
-  //  } catch (error) {
-  //   console.log(error)
-  //  }
-  // }
-
-  // useEffect(() => {
-  //   get()
-  // },[])
 
   return (
     <div className="max-w-7xl mx-auto">
