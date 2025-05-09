@@ -13,11 +13,11 @@ import {
 import moment from 'moment-timezone';
 import { db } from "./conexao"
 
-export async function getFoodDiary() {
-    const Id = ""
+export async function getFoodDiary(userId: string) {
+    
     try {
         const mealsRef = collection(db, "meals");
-        const q = query(mealsRef, where('userId', '==', Id), orderBy('createdAt', 'desc'));
+        const q = query(mealsRef, where('userId', '==', userId), orderBy('createdAt', 'desc'));
 
         const querySnapshot = await getDocs(q);
         const dadosDoc = querySnapshot.docs.map((doc) => doc.data());

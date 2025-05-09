@@ -1,41 +1,37 @@
+// pages/dashboard.tsx
+"use client";
+import { useAuth } from "./hooks/useAuth";
+import { auth } from "./firebase/conexao";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Link from "next/link";
-import { ArrowBigRightIcon } from "lucide-react";
-import { CardPercent } from "./components/CardPercent";
-import { Header } from "./components/Header";
-import { Button } from "@/components/ui/button";
-import { SectionList } from "./components/SectionList";
-import { HistoryDTO } from "./dtos/HistoryDTO";
-import { getMeal } from "./actions/getMeals";
 
+export default function Home() {
+    const { user, loading } = useAuth();
+    const router = useRouter();
 
-export default async function Home() {
-  const getResult = await getMeal()
-  const goodSequence = getResult?.map(item => item.data).flat().filter((withinDiet: HistoryDTO) => withinDiet.withinDiet === true).length
-  const badSequence = getResult?.map(item => item.data).flat().filter((withinDiet: HistoryDTO) => withinDiet.withinDiet === false).length
-  let totalSequence = goodSequence! + badSequence!
-  let goodSequencePercentage = (goodSequence! / totalSequence) * 100
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push("/Login");
+        }
+    }, [user, loading]);
 
-  return (
-    <div className="max-w-7xl mx-auto">
-      <Header>Aplicativo Realcenutri</Header>
-      <div className="mx-auto w-70 md:w-150 text-center">
-        <CardPercent title={Number(goodSequencePercentage) ? Number(goodSequencePercentage.toFixed(0)) : 0} />
+    if (loading || !user) return <p>Carregando...</p>;
 
-        <div className="mt-10 flex justify-between">
-          <Link href="/FoodDiary/NewMeal">
-            <Button
-              className="mx-auto w-70 md:w-150 text-center bg-teal-600 hover:bg-teal-500" >
-              <p className="flex-1">Adicionar refeição</p>
-              <ArrowBigRightIcon />
-            </Button>
-          </Link>
+    return (
+        <div className="p-6">
+            <h1>Olá, {user.displayName}</h1>
+            <Link href="/Home">Acessar diário alimentar</Link>
+            <button
+                onClick={async () => {
+                    await signOut(auth);
+                    router.push("/login");
+                }}
+                className="bg-gray-500 text-white p-2 mt-4"
+            >
+                Sair
+            </button>
         </div>
-        
-      </div>
-
-      <div>
-        <SectionList sections={getResult}/>
-      </div>
-    </div>
-  );
+    );
 }
