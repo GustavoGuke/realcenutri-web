@@ -13,8 +13,28 @@ import {
 import moment from 'moment-timezone';
 import { db } from "./conexao"
 
+export async function createUsers(
+    userId: string,
+    name: string,
+    email: string,
+) {
+    try {
+        await addDoc(collection(db, "users"), {
+            userId,
+            name,
+            email,
+            userType: "paciente",
+            createdAt: serverTimestamp()
+        });
+        return true;
+    } catch (error) {
+        console.error("Erro ao criar usuário no Firestore:", error);
+        return false;
+    }
+}
+
 export async function getFoodDiary(userId: string) {
-    
+
     try {
         const mealsRef = collection(db, "meals");
         const q = query(mealsRef, where('userId', '==', userId), orderBy('createdAt', 'desc'));
@@ -83,6 +103,7 @@ export async function createMeal(
         return true
     } catch (error) {
         console.error("Erro ao criar refeição:", error);
+        return false
     }
 }
 
@@ -119,7 +140,8 @@ export async function updateMealStorage(
         return true
     } catch (error) {
         console.error("Erro ao atualizar refeição:", error);
-        return { error: "Erro ao atualizar refeição" };
+        return false;
+
     }
 }
 
@@ -144,6 +166,6 @@ export async function deleteMealStorage(userId: string, idMeal: string) {
         return true
     } catch (error) {
         console.error("Erro ao atualizar refeição:", error);
-        return { error: "Erro ao atualizar refeição" };
+        return false;
     }
 }
