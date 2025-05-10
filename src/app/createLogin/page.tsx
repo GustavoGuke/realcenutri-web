@@ -97,7 +97,7 @@ export default function createLogin() {
     };
 
     return (
-        <div className="p-6 max-w-md mx-auto space-y-4">
+        <div className="p-6 max-w-md mx-auto space-y-4 border rounded-md mt-20">
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
@@ -109,11 +109,9 @@ export default function createLogin() {
                             <FormItem>
                                 <FormLabel>Nome</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input placeholder="ex: seu nome..." {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    Informe seu nome
-                                </FormDescription>
+                                
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -123,14 +121,12 @@ export default function createLogin() {
                         control={form.control}
                         name="email"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="pt-4">
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input placeholder="ex: email@ex.com" {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    Informe seu Email
-                                </FormDescription>
+                                
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -140,10 +136,10 @@ export default function createLogin() {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="pt-4">
                                 <FormLabel>Senha</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input type="password" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Informe a senha, minímo 6 caracteres
@@ -157,13 +153,13 @@ export default function createLogin() {
                         control={form.control}
                         name="confirmPassword"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Confirme a senha</FormLabel>
+                            <FormItem className="pt-4">
+                                <FormLabel>Confirmar Senha</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input type="password" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    Falta pouco...
+                                    Informe a senha, minímo 6 caracteres
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -174,7 +170,7 @@ export default function createLogin() {
                         <Spinner />
                     ) : (
                         <Button type="submit" className="mx-auto mt-5  w-full  text-center bg-teal-600 hover:bg-teal-500">
-                            <p className="flex-1">Adicionar refeição</p>
+                            <p className="flex-1">Criar Conta</p>
                             <ArrowBigRightIcon />
                         </Button>
                     )}

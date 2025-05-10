@@ -34,7 +34,7 @@ export const SectionList = ({ sections }: Props) => {
                             {section.data.map((item: HistoryDTO, idx) => (
                                 <li key={idx}
                                     onClick={() => handleNavigate(item)}
-                                    className="text-gray-700 flex justify-between list-none py-2 border mt-1 p-1 bg-white hover:bg-gray-100 font-semibold rounded-md  border-gray-400"
+                                    className="text-gray-700 flex justify-between list-none p-3 border mt-1 p-1 bg-white hover:bg-gray-100 font-semibold rounded-md  border-gray-400"
                                 >
                                     {item.meals} - {item.withinDiet ? "Dentro da dieta" : "Fora da dieta"}
                                     <ArrowBigRightIcon />

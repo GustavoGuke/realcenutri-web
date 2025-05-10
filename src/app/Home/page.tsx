@@ -14,8 +14,8 @@ import { getFoodDiary } from "../firebase/foodDiary";
 import { HistoryGroup } from "../dtos/HistoryGroup";
 import { on } from "events";
 
-export default  function Home() {
-   const [getResult, setGetResult] = useState<HistoryGroup[]>([])
+export default function Home() {
+  const [getResult, setGetResult] = useState<HistoryGroup[]>([])
   const [loading, setLoading] = useState(true);
   //const getResult = await getMeal()
   const goodSequence = getResult?.map(item => item.data).flat().filter((withinDiet) => withinDiet.withinDiet === true).length
@@ -37,17 +37,17 @@ export default  function Home() {
     const user = onAuthStateChanged(auth, async (user) => {
       if (user) {
         getMeal(user.uid).then((meals) => {
-          setGetResult(meals)
+        setGetResult(meals)
         })
         setLoading(false)
       }
     })
     return () => user()
-  },[])
+  }, [])
 
   if (loading) return <p>Carregando...</p>
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mt-15">
       <Header>Aplicativo Realcenutri</Header>
       <div className="mx-auto w-70 md:w-150 text-center">
         <CardPercent title={Number(goodSequencePercentage) ? Number(goodSequencePercentage.toFixed(0)) : 0} />
@@ -61,11 +61,11 @@ export default  function Home() {
             </Button>
           </Link>
         </div>
-        
+
       </div>
 
       <div>
-        <SectionList sections={getResult}/>
+        <SectionList sections={getResult} />
       </div>
     </div>
   );

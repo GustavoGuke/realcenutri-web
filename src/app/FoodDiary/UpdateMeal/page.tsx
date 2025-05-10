@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useMeal } from "@/app/context/MealContext";
 import { deleteMealStorage, updateMealStorage } from "@/app/firebase/foodDiary";
 import { useRouter } from "next/navigation";
-import { on } from "events";
+import { useAuth } from "@/app/hooks/useAuth";
 
 
 const formSchema = z.object({
@@ -34,8 +34,9 @@ export default function UpdateMeal() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const { selectedMeal } = useMeal()
-
-
+    const { user, loading } = useAuth()
+    const [userCredencial, setUserCredencial] = useState("")
+    
     const defaultValues: FormSchema = {
         meal: selectedMeal?.meals || "",
         description: selectedMeal?.description || "",
@@ -52,16 +53,18 @@ export default function UpdateMeal() {
     async function onSubmit(data: FormSchema) {
         setIsLoading(true)
         try {
-            const response = await updateMealStorage("", selectedMeal?.idMeal || "", data)
+            const response = await updateMealStorage(userCredencial, selectedMeal?.idMeal || "", data)
             if(response){
                 alert("Refeição alterada com sucesso")
-                router.push("/")
+                router.push("../../Home")
             } else {
                 alert("Ocorreu um erro ao tentar alterar refeição, tente novamente mais tarde.")
-                router.push("/")
+                router.push("../../Home")
             }
         } catch (error) {
+            alert("Ocorreu um erro ao tentar alterar refeição, tente novamente mais tarde.")
             console.log(error)
+            return
         } finally {
             setIsLoading(false)
         }
@@ -70,20 +73,27 @@ export default function UpdateMeal() {
     async function onDelete() {
         setIsLoading(true)
         try {
-            const response = await deleteMealStorage("", selectedMeal?.idMeal || "")
+            const response = await deleteMealStorage(userCredencial, selectedMeal?.idMeal || "")
             if(response){
                 alert("Refeição excluida com sucesso")
-                router.push("/")
+                router.push("../../Home")
             } else {
                 alert("Ocorreu um erro ao tentar excluir refeição, tente novamente mais tarde.")
-                router.push("/")
+                router.push("../../Home")
             }
         } catch (error) {
+            alert("Ocorreu um erro ao tentar alterar refeição, tente novamente mais tarde.")
             console.log(error)
+            return
         } finally {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (!loading && user) setUserCredencial(user.uid)
+    }, [user, loading])
+
     return (
         <>
             <div className="max-w-xl p-4 mx-auto">

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,8 +18,9 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowBigRightIcon, ArrowBigLeftIcon } from "lucide-react"
 import { createMeal } from "@/app/firebase/foodDiary";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Spinner } from "@/app/components/Spinner";
+import { useAuth } from "@/app/hooks/useAuth";
 
 
 const formSchema = z.object({
@@ -32,6 +32,9 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 export default function NewMeal() {
+    const { user, loading } = useAuth()
+    const [userCredencial, setUserCredencial] = useState("")
+    
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const form = useForm<FormSchema>({
@@ -45,16 +48,22 @@ export default function NewMeal() {
     async function onSubmit(data: FormSchema) {
         setIsLoading(true)
         try {
-            const response = await createMeal("", data.meal, data.describe, data.optionRadio === "Sim", "")
+            const response = await createMeal(userCredencial, data.meal, data.describe, data.optionRadio === "Sim", "")
             if (!response) return
             form.reset()
-            router.push("/")
+            router.push("../../Home")
         } catch (error) {
+            alert("Ocorreu um erro ao tentar salvar refeição, tente novamente mais tarde.")
             console.log(error)
+            return
         } finally {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (!loading && user) setUserCredencial(user.uid)
+    }, [user, loading])
     return (
         <>
             <div className="max-w-xl p-4 mx-auto">

@@ -35,7 +35,7 @@ export default function Login() {
 
     async function handleForgotPassword() {
         if (email.trim() === '') {
-          alert('Erro: Email deve ser informado');
+          alert('Email deve ser informado');
           return;
         }
       
@@ -56,7 +56,7 @@ export default function Login() {
       }
 
     return (
-        <div className="p-6 max-w-md mx-auto space-y-4">
+        <div className="p-6 max-w-md mx-auto space-y-4 mt-4">
             <h1 className="text-xl font-bold">Login</h1>
 
             <input
@@ -74,20 +74,20 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button className="bg-blue-500 text-white p-2 w-full" onClick={loginEmail}>
-                Entrar com Email
+        <button className="bg-teal-500 text-white p-2 w-full cursor-pointer rounded-2xl" onClick={loginEmail}>
+                Acessar sua conta
             </button>
 
-            <button className="bg-green-500 text-white p-2 w-full" onClick={registerEmail}>
-                Criar Conta com Email
+        <button className="bg-green-400 text-white p-2 w-full cursor-pointer rounded-2xl" onClick={registerEmail}>
+                Criar conta
             </button>
 
             {/* <button className="bg-red-500 text-white p-2 w-full" onClick={loginGoogle}>
                 Entrar com Google
             </button> */}
 
-            <button className="bg-red-500 text-white p-2 w-full" onClick={handleForgotPassword}>
-                Entrar com Google
+        <button className="pointer text-teal-950 p-2 w-full cursor-pointer" onClick={handleForgotPassword}>
+                Esqueci a senha
             </button>
         </div>
     );
