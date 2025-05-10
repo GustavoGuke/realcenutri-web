@@ -5,7 +5,6 @@ import { auth } from "./firebase/conexao";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import logo from "../app/public/logo.jpeg";

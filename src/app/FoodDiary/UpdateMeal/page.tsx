@@ -112,9 +112,6 @@ export default function UpdateMeal() {
             </div>
 
             <div className="max-w-xl mx-auto p-4">
-
-
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                         <FormField

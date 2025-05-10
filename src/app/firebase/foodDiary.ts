@@ -74,7 +74,7 @@ export async function getFoodDiary(userId: string) {
 
         return newData;
     } catch (error) {
-        console.error('Erro ao buscar histórico de refeições:', error);
+        //console.error('Erro ao buscar histórico de refeições:', error);
         return [];
     }
 }
@@ -102,7 +102,7 @@ export async function createMeal(
         });
         return true
     } catch (error) {
-        console.error("Erro ao criar refeição:", error);
+        //console.error("Erro ao criar refeição:", error);
         return false
     }
 }
@@ -139,7 +139,7 @@ export async function updateMealStorage(
 
         return true
     } catch (error) {
-        console.error("Erro ao atualizar refeição:", error);
+        //console.error("Erro ao atualizar refeição:", error);
         return false;
 
     }
@@ -165,7 +165,7 @@ export async function deleteMealStorage(userId: string, idMeal: string) {
 
         return true
     } catch (error) {
-        console.error("Erro ao atualizar refeição:", error);
+        //console.error("Erro ao atualizar refeição:", error);
         return false;
     }
 }

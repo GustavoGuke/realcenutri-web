@@ -5,14 +5,10 @@ import { CardPercent } from "../components/CardPercent";
 import { Header } from "../components/Header";
 import { Button } from "@/components/ui/button";
 import { SectionList } from "../components/SectionList";
-import { HistoryDTO } from "../dtos/HistoryDTO";
-import { getMeal } from "../actions/getMeals";
-import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFoodDiary } from "../firebase/foodDiary";
 import { HistoryGroup } from "../dtos/HistoryGroup";
-import { on } from "events";
 
 export default function Home() {
   const [getResult, setGetResult] = useState<HistoryGroup[]>([])
