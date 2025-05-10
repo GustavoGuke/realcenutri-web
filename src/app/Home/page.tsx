@@ -10,6 +10,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFoodDiary } from "../firebase/foodDiary";
 import { HistoryGroup } from "../dtos/HistoryGroup";
 
+
 export default function Home() {
   const [getResult, setGetResult] = useState<HistoryGroup[]>([])
   const [loading, setLoading] = useState(true);
@@ -30,15 +31,15 @@ export default function Home() {
 
   useEffect(() => {
     const auth = getAuth()
-    const user = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         getMeal(user.uid).then((meals) => {
-        setGetResult(meals)
+        setGetResult(meals ?? [])
         })
         setLoading(false)
       }
     })
-    return () => user()
+    return () => unsubscribe()
   }, [])
 
   if (loading) return <p>Carregando...</p>
